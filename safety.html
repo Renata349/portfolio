@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Безопасность — МБОУ СОШ им. Г. Латыпова</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: #F9FAFB;
+            color: #1A202C;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* ===== ШАПКА ===== */
+        header {
+            background-color: #139E5D;
+            color: white;
+            border-radius: 14px;
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo-block {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            max-width: 60%;
+        }
+
+        .logo-text {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .logo-block img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        nav a.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Бургер */
+        .burger-menu {
+            display: none;
+            font-size: 30px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0 8px;
+        }
+
+        #mobileDropdown {
+            display: none;
+            flex-direction: column;
+            background: #139E5D;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            border-radius: 0 0 14px 14px;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        #mobileDropdown a {
+            color: white;
+            padding: 12px 28px;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            transition: background 0.2s;
+        }
+
+        #mobileDropdown a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #mobileDropdown a:last-child {
+            border-bottom: none;
+        }
+
+        /* ===== СЕКЦИЯ ===== */
+        .section {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #EAEAEA;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #111;
+        }
+
+        .section-description {
+            text-align: center;
+            color: #4A5568;
+            max-width: 750px;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* Медиа-блоки (круглые картинки) */
+        .media-block {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 16px 0 8px;
+        }
+
+        .media-item {
+            text-align: center;
+        }
+
+        .img-wrapper {
+            width: 160px;
+            height: 160px;
+            overflow: hidden;
+            margin: 0 auto 12px;
+            background-color: #E2E8F0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 3px solid #139E5D;
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-item p {
+            font-weight: 600;
+            font-size: 14px;
+            color: #1A202C;
+        }
+
+        /* Сетка кнопок */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .interactive-btn {
+            background-color: #FFF;
+            border: 2px solid #139E5D;
+            color: #139E5D;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .interactive-btn:hover {
+            background-color: #139E5D;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(19, 158, 93, 0.3);
+        }
+
+        /* ===== МОДАЛКА ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            font-size: 26px;
+            cursor: pointer;
+            color: #718096;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: #1A202C;
+        }
+
+        #mTitle {
+            color: #139E5D;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        #mBody {
+            color: #4A5568;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* ===== ФУТЕР ===== */
+        footer {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid #EAEAEA;
+            margin-top: 16px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1A202C;
+        }
+
+        .footer-col p {
+            font-size: 14px;
+            color: #4A5568;
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            text-decoration: none;
+            color: #4A5568;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #139E5D;
+        }
+
+        .social-box {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 16px;
+            background: #139E5D;
+            color: white !important;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .social-box:hover {
+            background: #0d7a47;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px 0 0;
+            border-top: 1px solid #E2E8F0;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #718096;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 768px) {
+            nav {
+                display: none !important;
+            }
+
+            .burger-menu {
+                display: block !important;
+            }
+
+            .logo-block {
+                max-width: 80%;
+            }
+
+            .logo-text {
+                font-size: 12px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .btn-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .media-block {
+                gap: 20px;
+            }
+
+            .img-wrapper {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            header {
+                padding: 12px 16px;
+            }
+
+            .logo-text {
+                font-size: 11px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .img-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+       
+        <header>
+            <div class="logo-block">
+                <img src="герб.png" alt="Логотип школы">
+                <div class="logo-text">МБОУ СОШ имени Героя Советского Союза Габдрахмана Хакимовича Латыпова с. Старобаширово</div>
+            </div>
+
+            <nav>
+                <a href="index.html">Главная</a>
+                <a href="about.html">Сведения об ОО</a>
+                <a href="safety.html" class="active">Безопасность</a>
+                <a href="parents.html">Родителям</a>
+                <a href="students.html">Ученикам</a>
+                <a href="teachers.html">Педагогам</a>
+            </nav>
+
+            <button class="burger-menu" onclick="toggleMobileMenu()">☰</button>
+
+            <!-- Мобильное меню -->
+            <div id="mobileDropdown">
+                <a href="index.html">Главная</a>
+                <a href="about.html">Сведения об ОО</a>
+                <a href="safety.html" class="active">Безопасность</a>
+                <a href="parents.html">Родителям</a>
+                <a href="students.html">Ученикам</a>
+                <a href="teachers.html">Педагогам</a>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">Безопасность в школе</h2>
+            <p class="section-description">
+                В школе ведется круглосуточное видеонаблюдение, работает строгий контролируемый пропускной режим сотрудников и посетителей, регулярно проводятся учебные тренировки.
+            </p>
+
+           
+            <div class="media-block">
+                <div class="media-item">
+                    <div class="img-wrapper">
+                        <img src="учеб.эвакуация.jpg" alt="Учебная эвакуация">
+                    </div>
+                    <p>Учебная эвакуация</p>
+                </div>
+                <div class="media-item">
+                    <div class="img-wrapper">
+                        <img src="турникет.webp" alt="Пост охраны">
+                    </div>
+                    <p>Пост охраны</p>
+                </div>
+            </div>
+
+         
+            <div class="btn-grid">
+                <button class="interactive-btn" onclick="showM('Информационная безопасность', 'На всех школьных компьютерах подключена автоматическая контент-фильтрация. Регулярно проводятся уроки безопасного интернета и цифровой гигиены.')">
+                    Информационная безопасность
+                </button>
+                <button class="interactive-btn" onclick="showM('Пожарная безопасность', 'Здание полностью оснащено автоматической пожарной сигнализацией и речевым оповещением. Все выходы свободны.')">
+                    Пожарная безопасность
+                </button>
+                <button class="interactive-btn" onclick="showM('Дорожная безопасность', 'Разработан и утвержден паспорт дорожной безопасности «Дом-Школа-Дом». Еженедельно проводятся профилактические минутки ПДД.')">
+                    Дорожная безопасность
+                </button>
+                <button class="interactive-btn" onclick="showM('Антитеррор', 'Допуск в здание посторонних лиц осуществляется строго по документам, удостоверяющим личность. Периметр полностью огражден.')">
+                    Антитеррор
+                </button>
+                <button class="interactive-btn" onclick="showM('Телефоны служб спасения', 'Единый телефон спасения: 112<br>Пожарная служба: 101<br>Полиция: 102<br>Скорая медицинская помощь: 103')">
+                    Телефоны служб спасения
+                </button>
+            </div>
+        </section>
+
+      
+        <footer>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <p style="font-weight: 600; color: #1A202C;">МБОУ СОШ с. Старобаширово</p>
+                    <p>Республика Башкортостан, Чекмагушевский р-н, с. Старобаширово, ул. Хузина 63</p>
+                    <p style="margin-top: 8px;"> +7 (34796) 22-13-13</p>
+                    <p>✉️ starobash_school@mail.ru</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Разделы сайта</h4>
+                    <ul>
+                        <li><a href="index.html">Главная страница</a></li>
+                        <li><a href="about.html">Сведения об организации</a></li>
+                        <li><a href="safety.html">Безопасность в школе</a></li>
+                        <li><a href="parents.html">Родителям</a></li>
+                        <li><a href="students.html">Ученикам</a></li>
+                        <li><a href="teachers.html">Педагогам</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Социальные сети</h4>
+                    <p>Следите за нашими новостями и важными объявлениями в официальном сообществе:</p>
+                    <a href="https://vk.com" class="social-box" target="_blank">Наша группа ВКонтакте</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 Официальный сайт МБОУ СОШ с. Старобаширово
+            </div>
+        </footer>
+    </div>
+
+   
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeM()">&times;</span>
+            <h3 id="mTitle"></h3>
+            <p id="mBody"></p>
+        </div>
+    </div>
+
+   
+    <script>
+        const modal = document.getElementById('infoModal');
+
+        function showM(title, body) {
+            document.getElementById('mTitle').innerHTML = title;
+            document.getElementById('mBody').innerHTML = body;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeM() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        window.onclick = function(e) {
+            if (e.target == modal) {
+                closeM();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileDropdown');
+            if (menu.style.display === 'flex') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'flex';
+            }
+        }
+    </script>
+</body>
+</html>
